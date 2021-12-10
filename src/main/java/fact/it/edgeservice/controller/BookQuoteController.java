@@ -42,7 +42,7 @@ public class BookQuoteController {
     }
 
     @GetMapping("/bookquotes/guess")
-    public Boolean getBookQuotesByISBN(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
+    public Boolean guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/guess/{bookTitleGuess}",
                         Book.class, bookTitleGuess);
