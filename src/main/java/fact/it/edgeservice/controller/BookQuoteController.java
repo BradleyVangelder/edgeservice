@@ -32,7 +32,7 @@ public class BookQuoteController {
                         Book.class, ISBN);
 
         ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/{ISBN}",
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/book/{ISBN}",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
                         }, ISBN);
 
