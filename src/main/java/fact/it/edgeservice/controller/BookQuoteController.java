@@ -40,7 +40,6 @@ public class BookQuoteController {
 
         return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
     }
-<<<<<<< HEAD
 
     @PutMapping("/bookquotes/quote")
     public Quote edit(@RequestParam String quoteId, @RequestParam String newQuote){
@@ -59,11 +58,12 @@ public class BookQuoteController {
     }
 
     @DeleteMapping("/bookquotes/quote")
-    public ResponseEntity delete(@RequestParam String quoteId){
+    public ResponseEntity delete(@RequestParam String quoteId) {
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
 
         return ResponseEntity.ok().build();
-=======
+    }
+
     @GetMapping("/bookquotes/{category}")
     public BookQuotes getBookQuotesbyCategory(@PathVariable String category){
 
@@ -78,7 +78,6 @@ public class BookQuoteController {
 
         List<Quote> quotes = responseEntityReviews.getBody();
 
-    return new BookQuotes(book.getTitle(),book.getCategory(), quotes);
->>>>>>> 3db27b9539915fdbded2d5dd9472f42b3b0548ab
+        return new BookQuotes(book.getTitle(),book.getCategory(), quotes);
     }
 }
