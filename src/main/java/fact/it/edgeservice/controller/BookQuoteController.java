@@ -64,7 +64,7 @@ public class BookQuoteController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/bookquotes/{category}")
+    @GetMapping("/bookquotes/book/{category}")
     public BookQuotes getBookQuotesbyCategory(@PathVariable String category){
 
         Book book =
