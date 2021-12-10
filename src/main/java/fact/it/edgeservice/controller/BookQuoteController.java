@@ -42,7 +42,7 @@ public class BookQuoteController {
     }
 
     @GetMapping("/bookquotes/guess")
-    public String guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
+    public Boolean guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/guess/{bookTitleGuess}",
                         Book.class, bookTitleGuess);
@@ -51,7 +51,7 @@ public class BookQuoteController {
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
                         Quote.class);
 
-        return book.getISBN() + " " + quote.getISBN();
+        return book.getISBN().equals(quote.getISBN());
     }
 
     @PutMapping("/bookquotes/quote")
