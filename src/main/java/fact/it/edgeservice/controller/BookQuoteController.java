@@ -41,6 +41,19 @@ public class BookQuoteController {
         return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
     }
 
+    @GetMapping("/bookquotes/guess")
+    public Boolean getBookQuotesByISBN(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
+        Book book =
+                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/guess/{bookTitleGuess}",
+                        Book.class, bookTitleGuess);
+
+        Quote quote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
+                        Quote.class);
+
+        return book.getISBN() == quote.getISBN();
+    }
+
     @PutMapping("/bookquotes/quote")
     public Quote edit(@RequestParam String quoteId, @RequestParam String newQuote){
         Quote quote =
