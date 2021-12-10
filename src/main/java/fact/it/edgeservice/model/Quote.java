@@ -1,7 +1,7 @@
 package fact.it.edgeservice.model;
 
 public class Quote {
-    private int id;
+    private String id;
     private String quote;
     private String ISBN;
 
@@ -12,11 +12,11 @@ public class Quote {
         setQuote(quote);
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
