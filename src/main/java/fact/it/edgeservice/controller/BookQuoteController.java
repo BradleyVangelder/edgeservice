@@ -83,8 +83,8 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/quote")
-    public Quote edit(@RequestParam String quoteId, @RequestParam String newQuote){
+    @PutMapping("/bookquotes/quote/{quoteId}")
+    public Quote edit(@PathVariable String quoteId, @RequestParam String newQuote){
         Quote quote =
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
                         Quote.class);
@@ -99,9 +99,41 @@ public class BookQuoteController {
         return retrievedReview;
     }
 
-    @DeleteMapping("/bookquotes/quote")
-    public ResponseEntity delete(@RequestParam String quoteId) {
+    @PutMapping("/bookquotes/book/{bookId}")
+    public Book editBook(@PathVariable Long bookId, @RequestParam Book newBook){
+        Book book =
+                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/" + bookId,
+                        Book.class);
+        book.setTitle(book.getTitle());
+        book.setISBN(book.getISBN());
+
+        ResponseEntity<Book> responseEntityReview =
+                restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/" + bookId,
+                        HttpMethod.PUT, new HttpEntity<>(book), Book.class);
+
+        Book retrievedReview = responseEntityReview.getBody();
+
+        return retrievedReview;
+    }
+
+    @PostMapping("/bookquotes/quote")
+    public ResponseEntity editBook(@RequestParam Quote newQuote){
+        restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote/",
+                        HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/bookquotes/quote/{quoteId}")
+    public ResponseEntity delete(@PathVariable String quoteId) {
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/bookquotes/book/{bookId}")
+    public ResponseEntity deleteBook(@PathVariable Long bookId) {
+        restTemplate.delete("http://" + bookServiceBaseUrl + "/book/" + bookId);
 
         return ResponseEntity.ok().build();
     }
