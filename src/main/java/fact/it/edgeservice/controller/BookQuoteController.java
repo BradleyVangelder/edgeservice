@@ -41,6 +41,35 @@ public class BookQuoteController {
         return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
     }
 
+    @GetMapping("/bookquotes/getrandombookquote")
+    public BookQuotes getRandomBookQuote(){
+        Book book =
+                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/random",
+                        Book.class);
+
+        ResponseEntity<List<Quote>> responseEntityReviews =
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
+                        }, book.getISBN());
+
+        List<Quote> quotes = responseEntityReviews.getBody();
+
+        return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
+    }
+
+    @GetMapping("/bookquotes/beforeguess")
+    public Quote getRandomBookBeforeguess(){
+        Book book =
+                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/random",
+                        Book.class);
+
+        Quote quote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
+                        Quote.class, book.getISBN());
+
+        return quote;
+    }
+
     @GetMapping("/bookquotes/guess")
     public Boolean guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
         Book book =
