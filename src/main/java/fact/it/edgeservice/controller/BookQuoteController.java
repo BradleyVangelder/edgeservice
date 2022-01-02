@@ -4,7 +4,6 @@ import fact.it.edgeservice.model.Book;
 import fact.it.edgeservice.model.BookQuote;
 import fact.it.edgeservice.model.BookQuotes;
 import fact.it.edgeservice.model.Quote;
-import jdk.nashorn.internal.ir.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -31,7 +30,7 @@ public class BookQuoteController {
     @GetMapping("/books")
     public List<Book> getBooks(){
         ResponseEntity<List<Book>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/book/",
+                restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Book>>() {
                         });
 
