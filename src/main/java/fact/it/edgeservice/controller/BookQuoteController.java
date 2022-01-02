@@ -142,11 +142,11 @@ public class BookQuoteController {
     public BookQuotes getBookQuotesbyCategory(@PathVariable String category){
 
         Book book =
-                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/{category}",
+                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/category/{category}",
                         Book.class, category);
 
         ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/{ISBN}",
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/book/{ISBN}",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
                         }, book.getISBN());
 
