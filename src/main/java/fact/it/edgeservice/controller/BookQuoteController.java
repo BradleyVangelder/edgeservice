@@ -25,6 +25,18 @@ public class BookQuoteController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @GetMapping("/books")
+    public List<Book> getBooks(){
+        ResponseEntity<List<Book>> responseEntityReviews =
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/book/",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Book>>() {
+                        });
+
+        List<Book> books = responseEntityReviews.getBody();
+
+        return books;
+    }
+
     @GetMapping("/bookquotes/{ISBN}")
     public BookQuotes getBookQuotesByISBN(@PathVariable String ISBN){
         Book book =
@@ -136,22 +148,5 @@ public class BookQuoteController {
         restTemplate.delete("http://" + bookServiceBaseUrl + "/book/" + bookId);
 
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/bookquotes/book/{category}")
-    public BookQuotes getBookQuotesbyCategory(@PathVariable String category){
-
-        Book book =
-                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/category/{category}",
-                        Book.class, category);
-
-        ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/book/{ISBN}",
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
-                        }, book.getISBN());
-
-        List<Quote> quotes = responseEntityReviews.getBody();
-
-        return new BookQuotes(book.getTitle(),book.getCategory(), quotes);
     }
 }
