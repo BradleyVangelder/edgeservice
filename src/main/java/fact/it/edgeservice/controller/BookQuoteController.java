@@ -146,9 +146,9 @@ public class BookQuoteController {
                         Book.class, category);
 
         ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/{category}",
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/{ISBN}",
                         HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
-                        }, category);
+                        }, book.getISBN());
 
         List<Quote> quotes = responseEntityReviews.getBody();
 
