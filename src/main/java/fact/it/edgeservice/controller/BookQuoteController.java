@@ -1,8 +1,10 @@
 package fact.it.edgeservice.controller;
 
 import fact.it.edgeservice.model.Book;
+import fact.it.edgeservice.model.BookQuote;
 import fact.it.edgeservice.model.BookQuotes;
 import fact.it.edgeservice.model.Quote;
+import jdk.nashorn.internal.ir.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -54,19 +57,16 @@ public class BookQuoteController {
     }
 
     @GetMapping("/bookquotes/getrandombookquote")
-    public BookQuotes getRandomBookQuote(){
+    public BookQuote getRandomBookQuote(){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/random",
                         Book.class);
 
-        ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
-                        }, book.getISBN());
+        Quote quote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
+                        Quote.class, book.getISBN());
 
-        List<Quote> quotes = responseEntityReviews.getBody();
-
-        return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
+        return new BookQuote(book.getTitle(), book.getISBN(), quote);
     }
 
     @GetMapping("/bookquotes/beforeguess")
