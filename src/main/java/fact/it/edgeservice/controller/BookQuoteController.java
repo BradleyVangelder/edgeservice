@@ -9,13 +9,29 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import javax.jms.Queue;
 
 @RestController
 public class BookQuoteController {
+    @Autowired
+    JmsTemplate jmsTemplate;
+
+    @Autowired
+    Queue queue;
+
+    @GetMapping("/{message}")
+    public String publish(@PathVariable("message")
+                          final String message) {
+
+        jmsTemplate.convertAndSend(queue, message);
+
+        return "Published Successfully";
+    }
     @Value("${bookservice.baseurl}")
     private String bookServiceBaseUrl;
 
