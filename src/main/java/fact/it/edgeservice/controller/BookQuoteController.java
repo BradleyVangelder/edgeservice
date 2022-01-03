@@ -1,6 +1,7 @@
 package fact.it.edgeservice.controller;
 
 import fact.it.edgeservice.model.Book;
+import fact.it.edgeservice.model.BookQuote;
 import fact.it.edgeservice.model.BookQuotes;
 import fact.it.edgeservice.model.Quote;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import javax.jms.Queue;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class BookQuoteController {
     @Autowired
@@ -41,6 +44,18 @@ public class BookQuoteController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @GetMapping("/books")
+    public List<Book> getBooks(){
+        ResponseEntity<List<Book>> responseEntityReviews =
+                restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/",
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Book>>() {
+                        });
+
+        List<Book> books = responseEntityReviews.getBody();
+
+        return books;
+    }
+
     @GetMapping("/bookquotes/{ISBN}")
     public BookQuotes getBookQuotesByISBN(@PathVariable String ISBN){
         Book book =
@@ -58,19 +73,16 @@ public class BookQuoteController {
     }
 
     @GetMapping("/bookquotes/getrandombookquote")
-    public BookQuotes getRandomBookQuote(){
+    public BookQuote getRandomBookQuote(){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/random",
                         Book.class);
 
-        ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
-                        }, book.getISBN());
+        Quote quote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/random/{ISBN}",
+                        Quote.class, book.getISBN());
 
-        List<Quote> quotes = responseEntityReviews.getBody();
-
-        return new BookQuotes(book.getTitle(),book.getISBN(), quotes);
+        return new BookQuote(book.getTitle(), book.getISBN(), quote);
     }
 
     @GetMapping("/bookquotes/beforeguess")
@@ -152,22 +164,5 @@ public class BookQuoteController {
         restTemplate.delete("http://" + bookServiceBaseUrl + "/book/" + bookId);
 
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/bookquotes/book/{category}")
-    public BookQuotes getBookQuotesbyCategory(@PathVariable String category){
-
-        Book book =
-                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/{category}",
-                        Book.class, category);
-
-        ResponseEntity<List<Quote>> responseEntityReviews =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/{category}",
-                        HttpMethod.GET, null, new ParameterizedTypeReference<List<Quote>>() {
-                        }, category);
-
-        List<Quote> quotes = responseEntityReviews.getBody();
-
-        return new BookQuotes(book.getTitle(),book.getCategory(), quotes);
     }
 }
