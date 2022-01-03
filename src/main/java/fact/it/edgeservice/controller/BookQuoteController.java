@@ -82,8 +82,8 @@ public class BookQuoteController {
         return quote;
     }
 
-    @GetMapping("/bookquotes/guess")
-    public Boolean guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
+    @GetMapping("/bookquotes/guess/{quoteId}/{bookTitleGuess}")
+    public Boolean guessQuoteByTitle(@PathVariable String quoteId, @PathVariable String bookTitleGuess){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/guess/{bookTitleGuess}",
                         Book.class, bookTitleGuess);
@@ -96,7 +96,7 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/quote/{quoteId}")
-    public Quote edit(@PathVariable String quoteId, @RequestParam String newQuote){
+    public Quote edit(@PathVariable String quoteId, @RequestBody String newQuote){
         Quote quote =
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
                         Quote.class);
@@ -112,12 +112,12 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/book/{bookId}")
-    public Book editBook(@PathVariable Long bookId, @RequestParam Book newBook){
+    public Book editBook(@PathVariable Long bookId, @RequestBody Book newBook){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/" + bookId,
                         Book.class);
-        book.setTitle(book.getTitle());
-        book.setISBN(book.getISBN());
+        book.setTitle(newBook.getTitle());
+        book.setISBN(newBook.getISBN());
 
         ResponseEntity<Book> responseEntityReview =
                 restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/" + bookId,
@@ -129,7 +129,7 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public ResponseEntity editBook(@RequestParam Quote newQuote){
+    public ResponseEntity editBook(@RequestBody Quote newQuote){
         restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote/",
                         HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
 
