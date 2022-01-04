@@ -24,6 +24,8 @@ public class Config {
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
         factory.setBrokerURL(brokerUrl);
+        factory.setUserName("admin");
+        factory.setPassword("admin");
         return factory;
     }
 

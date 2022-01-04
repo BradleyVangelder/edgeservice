@@ -1,5 +1,3 @@
-
-
 apiVersion: apps/v1                          # API version
 kind: Deployment                             # Type of kubernetes resource
 metadata:
@@ -47,3 +45,44 @@ spec:
     - name: http
       port: 8050
       targetPort: 8050
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue
+  template:
+    metadata:
+      labels:
+        app: queue
+    spec:
+      containers:
+        - name: web
+          image: webcenter/activemq:5.14.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 61616
+          resources:
+            limits:
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue
+spec:
+  ports:
+    - name: dashboard
+      port: 8161
+      targetPort: 8161
+      protocol: TCP
+    - name: openwire
+      port: 61616
+      targetPort: 61616
+      protocol: TCP
+  selector:
+    app: queue
