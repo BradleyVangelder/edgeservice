@@ -142,7 +142,7 @@ public class BookQuoteController {
 
     @PostMapping("/bookquotes/quote")
     public ResponseEntity editBook(@RequestBody NewQuote newQuote){
-        restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote",
+        restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote",
                         HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
 
         return ResponseEntity.ok().build();
