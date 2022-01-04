@@ -1,3 +1,5 @@
+Welkom bij onze book quotes repo! Met deze API kan je de basic tasks uitvoeren dat je er van zou verwachten(quote's van een bepaald boek opvragen, quote van een boek toevoegen, quote wijzigen/verwijderen,etc.), maar het heeft ook coole features zoals: Guess where the quote is from & get a random quote
+
 # edgeservice
 
 ![Inhoud](https://user-images.githubusercontent.com/57799560/148070070-6f0ea023-8724-4819-bcb3-f8f7fce2da8a.png)
