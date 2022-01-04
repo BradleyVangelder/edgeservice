@@ -123,25 +123,8 @@ public class BookQuoteController {
         return retrievedReview;
     }
 
-    @PutMapping("/bookquotes/book/{bookId}")
-    public Book editBook(@PathVariable Long bookId, @RequestParam String title, @RequestParam String isbn){
-        Book book =
-                restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/" + bookId,
-                        Book.class);
-        book.setTitle(title);
-        book.setISBN(isbn);
-
-        ResponseEntity<Book> responseEntityReview =
-                restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/" + bookId,
-                        HttpMethod.PUT, new HttpEntity<>(book), Book.class);
-
-        Book retrievedReview = responseEntityReview.getBody();
-
-        return retrievedReview;
-    }
-
     @PostMapping("/bookquotes/quote")
-    public Quote editBook(@RequestParam String isbn, @RequestParam String quote){
+    public Quote addQuote(@RequestParam String isbn, @RequestParam String quote){
 
         Quote newQuote =
                 restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
@@ -153,13 +136,6 @@ public class BookQuoteController {
     @DeleteMapping("/bookquotes/quote/{quoteId}")
     public ResponseEntity delete(@PathVariable String quoteId) {
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/bookquotes/book/{bookId}")
-    public ResponseEntity deleteBook(@PathVariable Long bookId) {
-        restTemplate.delete("http://" + bookServiceBaseUrl + "/book/" + bookId);
 
         return ResponseEntity.ok().build();
     }

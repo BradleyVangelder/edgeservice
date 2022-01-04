@@ -16,6 +16,13 @@ public class Book {
         this.category = category;
     }
 
+    public Book(String title, String ISBN, String category) {
+        this.id = id;
+        this.title = title;
+        this.ISBN = ISBN;
+        this.category = category;
+    }
+
     public int getId() {
         return id;
     }
