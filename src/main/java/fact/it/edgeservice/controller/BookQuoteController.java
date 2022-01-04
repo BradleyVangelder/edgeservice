@@ -1,9 +1,6 @@
 package fact.it.edgeservice.controller;
 
-import fact.it.edgeservice.model.Book;
-import fact.it.edgeservice.model.BookQuote;
-import fact.it.edgeservice.model.BookQuotes;
-import fact.it.edgeservice.model.Quote;
+import fact.it.edgeservice.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -111,15 +108,15 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/quote/{quoteId}/{newQuote}")
-    public Quote edit(@PathVariable String quoteId, @PathVariable String newQuote){
+    @PutMapping("/bookquotes/quote")
+    public Quote edit(@RequestBody NewQuote newQuote){
         Quote quote =
-                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + newQuote.getId(),
                         Quote.class);
-        quote.setQuote(newQuote);
+        quote.setQuote(newQuote.getNewQoute());
 
         ResponseEntity<Quote> responseEntityReview =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + newQuote.getId(),
                         HttpMethod.PUT, new HttpEntity<>(quote), Quote.class);
 
         Quote retrievedReview = responseEntityReview.getBody();
