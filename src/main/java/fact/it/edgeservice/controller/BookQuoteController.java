@@ -108,7 +108,7 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/quote")
+    @PutMapping("/bookquotes/editQuote")
     public Quote edit(@RequestBody NewQuote newQuote){
         Quote quote =
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + newQuote.getId(),
