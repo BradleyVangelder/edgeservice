@@ -111,8 +111,8 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/quote/{quoteId}")
-    public Quote edit(@PathVariable String quoteId, @RequestBody String newQuote){
+    @PutMapping("/bookquotes/quote/{quoteId}/{newQuote}")
+    public Quote edit(@PathVariable String quoteId, @PathVariable String newQuote){
         Quote quote =
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
                         Quote.class);
