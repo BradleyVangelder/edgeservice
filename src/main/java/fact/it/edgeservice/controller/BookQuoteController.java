@@ -141,13 +141,23 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public Quote editBook(@RequestParam String isbn, @RequestParam String quote){
+    public Quote addQuote(@RequestParam String isbn, @RequestParam String quote){
 
         Quote newQuote =
                 restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
                         new Quote(quote, isbn),Quote.class);
 
         return newQuote;
+    }
+
+    @PostMapping("/bookquotes/book")
+    public Book addBook(@RequestParam String isbn, @RequestParam String title, @RequestParam String category){
+
+        Book newBook =
+                restTemplate.postForObject("http://" + bookServiceBaseUrl + "/book",
+                        new Book(title, isbn,  category),Book.class);
+
+        return newBook;
     }
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
