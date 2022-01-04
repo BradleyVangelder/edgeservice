@@ -108,14 +108,14 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/editQuote")
-    public Quote edit(@RequestBody UpdatedQuote updatedQuote){
-        Quote quote =
-                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + updatedQuote.getId(),
+    public Quote edit(@RequestParam String id, @RequestParam String quote){
+        Quote foundQuote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + id,
                         Quote.class);
-        quote.setQuote(updatedQuote.getNewQoute());
+        foundQuote.setQuote(quote);
 
         ResponseEntity<Quote> responseEntityReview =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + updatedQuote.getId(),
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + id,
                         HttpMethod.PUT, new HttpEntity<>(quote), Quote.class);
 
         Quote retrievedReview = responseEntityReview.getBody();
@@ -141,11 +141,13 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public ResponseEntity editBook(@RequestBody NewQuote newQuote){
-        restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote",
-                        HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
+    public Quote editBook(@RequestParam String ISBN, @RequestParam String quote){
 
-        return ResponseEntity.ok().build();
+        Quote newQuote =
+                restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
+                        new Quote(quote, ISBN),Quote.class);
+
+        return newQuote;
     }
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
