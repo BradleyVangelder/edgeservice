@@ -1,22 +1,22 @@
 package fact.it.edgeservice.model;
 
 public class NewQuote {
-    private String id;
-    private String newQoute;
+    private String quote;
+    private String ISBN;
 
-    public String getId() {
-        return id;
+    public String getQuote() {
+        return quote;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setQuote(String quote) {
+        this.quote = quote;
     }
 
-    public String getNewQoute() {
-        return newQoute;
+    public String getISBN() {
+        return ISBN;
     }
 
-    public void setNewQoute(String newQoute) {
-        this.newQoute = newQoute;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 }

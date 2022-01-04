@@ -11,7 +11,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
 import javax.jms.Queue;
 
@@ -109,14 +108,14 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/editQuote")
-    public Quote edit(@RequestBody NewQuote newQuote){
+    public Quote edit(@RequestBody UpdatedQuote updatedQuote){
         Quote quote =
-                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + newQuote.getId(),
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + updatedQuote.getId(),
                         Quote.class);
-        quote.setQuote(newQuote.getNewQoute());
+        quote.setQuote(updatedQuote.getNewQoute());
 
         ResponseEntity<Quote> responseEntityReview =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + newQuote.getId(),
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + updatedQuote.getId(),
                         HttpMethod.PUT, new HttpEntity<>(quote), Quote.class);
 
         Quote retrievedReview = responseEntityReview.getBody();
@@ -142,8 +141,8 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public ResponseEntity editBook(@RequestBody Quote newQuote){
-        restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote/",
+    public ResponseEntity editBook(@RequestBody NewQuote newQuote){
+        restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote",
                         HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
 
         return ResponseEntity.ok().build();
