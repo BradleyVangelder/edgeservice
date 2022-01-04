@@ -1,9 +1,6 @@
 package fact.it.edgeservice.controller;
 
-import fact.it.edgeservice.model.Book;
-import fact.it.edgeservice.model.BookQuote;
-import fact.it.edgeservice.model.BookQuotes;
-import fact.it.edgeservice.model.Quote;
+import fact.it.edgeservice.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,7 +11,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
 import javax.jms.Queue;
 
@@ -98,8 +94,8 @@ public class BookQuoteController {
         return quote;
     }
 
-    @GetMapping("/bookquotes/guess")
-    public Boolean guessQuoteByTitle(@RequestParam String quoteId, @RequestParam String bookTitleGuess){
+    @GetMapping("/bookquotes/guess/{quoteId}/{bookTitleGuess}")
+    public Boolean guessQuoteByTitle(@PathVariable String quoteId, @PathVariable String bookTitleGuess){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/guess/{bookTitleGuess}",
                         Book.class, bookTitleGuess);
@@ -111,16 +107,16 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/quote/{quoteId}")
-    public Quote edit(@PathVariable String quoteId, @RequestParam String newQuote){
-        Quote quote =
-                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
-                        Quote.class);
-        quote.setQuote(newQuote);
+    @PutMapping("/bookquotes/quote")
+    public Quote edit(@RequestParam String id, @RequestParam String quote){
+        Quote foundQuote =
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/{id}",
+                        Quote.class, id);
+        foundQuote.setQuote(quote);
 
         ResponseEntity<Quote> responseEntityReview =
-                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + quoteId,
-                        HttpMethod.PUT, new HttpEntity<>(quote), Quote.class);
+                restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + id,
+                        HttpMethod.PUT, new HttpEntity<>(foundQuote), Quote.class);
 
         Quote retrievedReview = responseEntityReview.getBody();
 
@@ -128,12 +124,12 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/book/{bookId}")
-    public Book editBook(@PathVariable Long bookId, @RequestParam Book newBook){
+    public Book editBook(@PathVariable Long bookId, @RequestParam String title, @RequestParam String isbn){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/" + bookId,
                         Book.class);
-        book.setTitle(book.getTitle());
-        book.setISBN(book.getISBN());
+        book.setTitle(title);
+        book.setISBN(isbn);
 
         ResponseEntity<Book> responseEntityReview =
                 restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/" + bookId,
@@ -145,11 +141,13 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public ResponseEntity editBook(@RequestParam Quote newQuote){
-        restTemplate.exchange("http://" + bookServiceBaseUrl + "/quote/",
-                        HttpMethod.POST, new HttpEntity<>(newQuote), Quote.class);
+    public Quote editBook(@RequestParam String isbn, @RequestParam String quote){
 
-        return ResponseEntity.ok().build();
+        Quote newQuote =
+                restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
+                        new Quote(quote, isbn),Quote.class);
+
+        return newQuote;
     }
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
