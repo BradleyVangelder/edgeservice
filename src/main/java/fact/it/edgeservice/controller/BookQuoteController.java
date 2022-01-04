@@ -107,16 +107,16 @@ public class BookQuoteController {
         return book.getISBN().equals(quote.getISBN());
     }
 
-    @PutMapping("/bookquotes/editQuote")
+    @PutMapping("/bookquotes/quote")
     public Quote edit(@RequestParam String id, @RequestParam String quote){
         Quote foundQuote =
-                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/" + id,
-                        Quote.class);
+                restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/{id}",
+                        Quote.class, id);
         foundQuote.setQuote(quote);
 
         ResponseEntity<Quote> responseEntityReview =
                 restTemplate.exchange("http://" + quoteServiceBaseUrl + "/quote/" + id,
-                        HttpMethod.PUT, new HttpEntity<>(quote), Quote.class);
+                        HttpMethod.PUT, new HttpEntity<>(foundQuote), Quote.class);
 
         Quote retrievedReview = responseEntityReview.getBody();
 
@@ -124,12 +124,12 @@ public class BookQuoteController {
     }
 
     @PutMapping("/bookquotes/book/{bookId}")
-    public Book editBook(@PathVariable Long bookId, @RequestBody Book newBook){
+    public Book editBook(@PathVariable Long bookId, @RequestParam String title, @RequestParam String isbn){
         Book book =
                 restTemplate.getForObject("http://" + bookServiceBaseUrl + "/book/" + bookId,
                         Book.class);
-        book.setTitle(newBook.getTitle());
-        book.setISBN(newBook.getISBN());
+        book.setTitle(title);
+        book.setISBN(isbn);
 
         ResponseEntity<Book> responseEntityReview =
                 restTemplate.exchange("http://" + bookServiceBaseUrl + "/book/" + bookId,
@@ -141,11 +141,11 @@ public class BookQuoteController {
     }
 
     @PostMapping("/bookquotes/quote")
-    public Quote editBook(@RequestParam String ISBN, @RequestParam String quote){
+    public Quote editBook(@RequestParam String isbn, @RequestParam String quote){
 
         Quote newQuote =
                 restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
-                        new Quote(quote, ISBN),Quote.class);
+                        new Quote(quote, isbn),Quote.class);
 
         return newQuote;
     }
