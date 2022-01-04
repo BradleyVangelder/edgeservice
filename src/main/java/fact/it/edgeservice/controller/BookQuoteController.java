@@ -23,7 +23,7 @@ public class BookQuoteController {
     @Autowired
     Queue queue;
 
-    @GetMapping("/{message}")
+    @GetMapping("message/{message}")
     public String publish(@PathVariable("message")
                           final String message) {
 
