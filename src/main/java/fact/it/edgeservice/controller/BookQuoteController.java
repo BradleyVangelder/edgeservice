@@ -154,8 +154,8 @@ public class BookQuoteController {
     public Book addBook(@RequestParam String isbn, @RequestParam String title, @RequestParam String category){
 
         Book newBook =
-                restTemplate.postForObject("http://" + bookServiceBaseUrl + "/book",
-                        new Book(title, isbn,  category),Book.class);
+                restTemplate.postForObject("http://" + bookServiceBaseUrl + "/book/add",
+                        new Book(title, isbn, category),Book.class);
 
         return newBook;
     }
