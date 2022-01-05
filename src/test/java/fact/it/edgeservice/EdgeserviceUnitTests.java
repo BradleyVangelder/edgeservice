@@ -111,34 +111,34 @@ public class EdgeserviceUnitTests {
     }
 
 
-    @Test
-    public void whenGetBooksByISBN_thenReturnFilledBookQuotesJson() throws Exception {
-
-        // GET Book 1 info
-        mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + bookServiceBaseUrl+ "/book/687468434568")))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.OK)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString(book1))
-                );
-
-
-        // GET all quotes for Book 1
-        mockServer.expect(ExpectedCount.once(),
-                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434568")))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.OK)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(mapper.writeValueAsString(allQuotesForBook1))
-                );
-
-
-        mockMvc.perform(get("/bookquotes/{ISBN}", "687468434568"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bookTitle", is("Zero to one")))
-                .andExpect(jsonPath("$.isbn", is("687468434568")))
-                .andExpect(jsonPath("$.quote[0].quote", is("Sales people are like actors")));
-    }
+//    @Test
+//    public void whenGetBooksByISBN_thenReturnFilledBookQuotesJson() throws Exception {
+//
+//        // GET Book 1 info
+//        mockServer.expect(ExpectedCount.once(),
+//                requestTo(new URI("http://" + bookServiceBaseUrl+ "/book/687468434568")))
+//                .andExpect(method(HttpMethod.GET))
+//                .andRespond(withStatus(HttpStatus.OK)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(mapper.writeValueAsString(book1))
+//                );
+//
+//
+//        // GET all quotes for Book 1
+//        mockServer.expect(ExpectedCount.once(),
+//                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434568")))
+//                .andExpect(method(HttpMethod.GET))
+//                .andRespond(withStatus(HttpStatus.OK)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(mapper.writeValueAsString(allQuotesForBook1))
+//                );
+//
+//
+//        mockMvc.perform(get("/bookquotes/{ISBN}", "687468434568"))
+//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.bookTitle", is("Zero to one")))
+//                .andExpect(jsonPath("$.isbn", is("687468434568")))
+//                .andExpect(jsonPath("$.quote[0].quote", is("Sales people are like actors")));
+//    }
 }
