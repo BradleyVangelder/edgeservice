@@ -17,7 +17,19 @@ public class Config {
 
     @Bean
     public Queue queue() {
-        return new ActiveMQQueue("standalone.queue");
+        return new ActiveMQQueue("test.queue");
+    }
+    @Bean
+    public Queue editQuote() {
+        return new ActiveMQQueue("editQuote.queue");
+    }
+    @Bean
+    public Queue createQuote() {
+        return new ActiveMQQueue("createQuote.queue");
+    }
+    @Bean
+    public Queue deleteQuote() {
+        return new ActiveMQQueue("deleteQuote.queue");
     }
 
     @Bean
