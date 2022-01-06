@@ -115,7 +115,7 @@ public class BookQuoteController {
 
     @PutMapping("/bookquotes/quote")
     public Quote edit(@RequestParam String id, @RequestParam String quote){
-        jmsTemplate.convertAndSend(editQuote, quote);
+        //jmsTemplate.convertAndSend(editQuote, quote);
 
         Quote foundQuote =
                 restTemplate.getForObject("http://" + quoteServiceBaseUrl + "/quote/{id}",
@@ -133,7 +133,7 @@ public class BookQuoteController {
 
     @PostMapping("/bookquotes/quote")
     public Quote addQuote(@RequestParam String isbn, @RequestParam String quote){
-        jmsTemplate.convertAndSend(createQuote, quote);
+        //jmsTemplate.convertAndSend(createQuote, quote);
 
         Quote newQuote =
                 restTemplate.postForObject("http://" + quoteServiceBaseUrl + "/quote",
@@ -144,7 +144,7 @@ public class BookQuoteController {
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
     public ResponseEntity delete(@PathVariable String quoteId) {
-        jmsTemplate.convertAndSend(deleteQuote, quoteId);
+        //jmsTemplate.convertAndSend(deleteQuote, quoteId);
 
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
 
