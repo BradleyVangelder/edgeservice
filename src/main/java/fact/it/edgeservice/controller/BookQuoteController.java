@@ -17,26 +17,26 @@ import javax.jms.Queue;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class BookQuoteController {
-    @Autowired
-    JmsTemplate jmsTemplate;
+//    @Autowired
+//    JmsTemplate jmsTemplate;
+//
+//    @Autowired
+//    Queue queue;
+//    @Autowired
+//    Queue editQuote;
+//    @Autowired
+//    Queue createQuote;
+//    @Autowired
+//    Queue deleteQuote;
 
-    @Autowired
-    Queue queue;
-    @Autowired
-    Queue editQuote;
-    @Autowired
-    Queue createQuote;
-    @Autowired
-    Queue deleteQuote;
-
-    @GetMapping("message/{message}")
-    public String publish(@PathVariable("message")
-                          final String message) {
-
-        jmsTemplate.convertAndSend(queue, message);
-
-        return "Published Successfully";
-    }
+//    @GetMapping("message/{message}")
+//    public String publish(@PathVariable("message")
+//                          final String message) {
+//
+//        jmsTemplate.convertAndSend(queue, message);
+//
+//        return "Published Successfully";
+//    }
     @Value("${bookservice.baseurl}")
     private String bookServiceBaseUrl;
 
@@ -144,7 +144,6 @@ public class BookQuoteController {
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
     public ResponseEntity delete(@PathVariable String quoteId) {
-
 
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
 
