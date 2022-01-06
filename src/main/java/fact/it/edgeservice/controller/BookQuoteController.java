@@ -144,7 +144,7 @@ public class BookQuoteController {
 
     @DeleteMapping("/bookquotes/quote/{quoteId}")
     public ResponseEntity delete(@PathVariable String quoteId) {
-        //jmsTemplate.convertAndSend(deleteQuote, quoteId);
+
 
         restTemplate.delete("http://" + quoteServiceBaseUrl + "/quote/" + quoteId);
 
