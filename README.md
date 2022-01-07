@@ -16,6 +16,10 @@ Welkom bij onze book quotes repo! Met deze API kan je de basic tasks uitvoeren d
 ## Sonar cloud
 ![image](https://user-images.githubusercontent.com/57799560/148070321-75b73049-19cb-438a-9cea-9e4d1c1c4aa5.png)
 
+## ActiveMq messages
+![image](https://user-images.githubusercontent.com/57799560/148613837-a6b74b01-d9d4-41bd-a33a-9b6581827935.png)
+
+
 ## Route tets with Postman
 
 #### GET: /books
