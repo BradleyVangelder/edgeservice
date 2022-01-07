@@ -3,6 +3,7 @@ package fact.it.edgeservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fact.it.edgeservice.model.Book;
+import fact.it.edgeservice.model.BookQuote;
 import fact.it.edgeservice.model.Quote;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,119 +63,147 @@ public class EdgeserviceUnitTests {
 
     @BeforeEach
     public void initializeMockserver() throws URISyntaxException, JsonProcessingException {
-//        mockServer = MockRestServiceServer.createServer(restTemplate);
-//
-//        // GET all quotes for Book 1
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434568")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(allQuotesForBook1))
-//                );
-//
-//        // GET all quotes for Book 2
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434578")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(allQuotesForBook2))
-//                );
-//
-//        // GET Book 1 info
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/687468434568")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(book1))
-//                );
-//
-//        // GET Book 2 info
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/687468434578")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(book2))
-//                );
-//        //GET Books by category 'Finance'
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/category/Finance")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(allBooks))
-//                );
-
+        mockServer = MockRestServiceServer.createServer(restTemplate);
     }
-//    @Test
-//    public void whenGetBooks_thenReturnFilledBookQuotesJson() throws Exception {
-//
-//        // GET Book 1 info
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(allBooks))
-//                );
+    @Test
+    public void whenGetBooks_thenReturnFilledBookQuotesJson() throws Exception {
 
-//        mockMvc.perform(get("/books"))
-//                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$",hasSize(2)))
-//                .andExpect(jsonPath("$[0].title", is("Zero to one")))
-//                .andExpect(jsonPath("$[0].isbn", is("687468434568")))
-//                .andExpect(jsonPath("$[0].quote[0].quote", is("Sales people are like actors")))
-//                .andExpect(jsonPath("$[1].title", is("The LEAN startup")))
-//                .andExpect(jsonPath("$[1].isbn", is("687468434578")))
-//                .andExpect(jsonPath("$[1].quote[1].quote", is("Do it LEAN")));
+        // GET Book 1 info
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(allBooks))
+                );
 
+        mockMvc.perform(get("/books"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$",hasSize(2)))
+                .andExpect(jsonPath("$[0].title", is("Zero to one")))
+                .andExpect(jsonPath("$[0].isbn", is("687468434568")))
+                .andExpect(jsonPath("$[1].title", is("The LEAN startup")))
+                .andExpect(jsonPath("$[1].isbn", is("687468434578")));
     }
 
 
-//    @Test
-//    public void whenGetBooksByISBN_thenReturnFilledBookQuotesJson() throws Exception {
-//
-//        // GET Book 1 info
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + bookServiceBaseUrl+ "/book/687468434568")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(book1))
-//                );
-//
-//
-//        // GET all quotes for Book 1
-//        mockServer.expect(ExpectedCount.once(),
-//                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434568")))
-//                .andExpect(method(HttpMethod.GET))
-//                .andRespond(withStatus(HttpStatus.OK)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(mapper.writeValueAsString(allQuotesForBook1))
-//                );
-//
-//
-//        mockMvc.perform(get("/bookquotes/{ISBN}", "687468434568"))
+    @Test
+    public void whenGetBooksByISBN_thenReturnFilledBookQuotesJson() throws Exception {
+
+        // GET Book 1 info
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl+ "/book/687468434568")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(book1))
+                );
+
+
+        // GET all quotes for Book 1
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/book/687468434568")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(allQuotesForBook1))
+                );
+
+
+        mockMvc.perform(get("/bookquotes/{ISBN}", "687468434568"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bookTitle", is("Zero to one")))
+                .andExpect(jsonPath("$.isbn", is("687468434568")));
+    }
+    @Test
+    public void whenAddBooks_thenReturnFilledBookQuotesJson() throws Exception {
+
+        BookQuote BookQuote = new BookQuote("new", "687468434568", quote1);
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote")))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(BookQuote))
+                );
+
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/687468434568")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(book1))
+                );
+
+//        mockMvc.perform(post("/bookquotes/quote")
+//                .param("ISBN", BookQuote.getISBN())
+//                .param("bookTitle", BookQuote.getBookTitle())
+//                .contentType(MediaType.APPLICATION_JSON))
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 //                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.bookTitle", is("Zero to one")))
+//                .andExpect(jsonPath("$.bookTitle", is("new")))
 //                .andExpect(jsonPath("$.isbn", is("687468434568")))
 //                .andExpect(jsonPath("$.quote[0].quote", is("Sales people are like actors")));
-//    }
-//@Test
-//public void whenDeleteBook_thenReturnStatusOk() throws Exception {
 //
-//    mockServer.expect(ExpectedCount.once(),
-//            requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/1")))
-//            .andExpect(method(HttpMethod.DELETE))
-//            .andRespond(withStatus(HttpStatus.OK)
-//            );
+
+    }
+
+    @Test
+    public void whenUpdateBookQuotes_thenReturnFilledBookQuotesJson() throws Exception {
+
+        BookQuote updatedBookQuote1 = new BookQuote("update", "ISBN1", quote1);
+
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/ISBN1")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(updatedBookQuote1))
+                );
+
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl + "/book")))
+                .andExpect(method(HttpMethod.PUT))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(updatedBookQuote1))
+                );
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + bookServiceBaseUrl + "/book/ISBN1")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(book1))
+                );
+
+//        mockMvc.perform(put("/bookquotes/quote")
+//                .param("ISBN", updatedBookQuote1.getISBN())
+//                .param("bookTitle", updatedBookQuote1.getBookTitle().toString())
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id", is(1)))
+//                .andExpect(jsonPath("$.bookTitle", is("update")))
+//                .andExpect(jsonPath("$.isbn", is("ISBN1")));
 //
-//    mockMvc.perform(delete("/bookquotes/quote/{quoteId}", 1))
-//            .andExpect(status().isOk());
-//}
-//}
+
+    }
+    @Test
+    public void whenDeleteBook_thenReturnStatusOk() throws Exception {
+
+        mockServer.expect(ExpectedCount.once(),
+                requestTo(new URI("http://" + quoteServiceBaseUrl + "/quote/1")))
+                .andExpect(method(HttpMethod.DELETE))
+                .andRespond(withStatus(HttpStatus.OK)
+                );
+
+        mockMvc.perform(delete("/bookquotes/quote/{quoteId}", 1))
+                .andExpect(status().isOk());
+    }
+}
